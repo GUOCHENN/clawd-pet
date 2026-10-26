@@ -1,0 +1,48 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+}
+
+#stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* Every animation's SVG is stacked here, feet on the bottom edge, centred; only the active one is visible. */
+#pet {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 0;
+}
+
+#pet svg {
+  position: absolute;
+  bottom: 0;
+  overflow: visible;
+  display: none;
+  cursor: grab;
+  pointer-events: none;
+}
+
+/* Only painted pixels count as "on Clawd"; everything else clicks through to the desktop. */
+#pet svg * {
+  pointer-events: visiblePainted;
+}
+
+#pet svg.active {
+  display: block;
+}
+
+#pet.dragging svg {
+  cursor: grabbing;
+}
+
+#pet .zzz {
+  font: bold 14px/1 "Consolas", monospace;
+  fill: #DD775B;
+}

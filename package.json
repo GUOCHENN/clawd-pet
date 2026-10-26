@@ -1,0 +1,19 @@
+{
+  "name": "clawd-pet",
+  "version": "1.0.0",
+  "description": "Clawd 桌面宠物（像素矩形 SVG + GSAP）",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "package": "node node_modules/@electron/packager/bin/electron-packager.mjs . Clawd --platform=win32 --arch=x64 --icon=assets/icon.ico --out=../clawd-dist --overwrite --asar"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.9.2"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
+  },
+  "productName": "Clawd"
+}

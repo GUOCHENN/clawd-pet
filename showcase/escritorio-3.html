@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Escritorio 3 · ¡Pínchalo!</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="desktop.css">
+<style>
+  .wall { background:
+    radial-gradient(55% 70% at 80% 75%, #7fe0c2 0%, rgba(127,224,194,0) 60%),
+    radial-gradient(50% 60% at 20% 20%, #b8f0d8 0%, rgba(184,240,216,0) 60%),
+    linear-gradient(150deg, #d8f6ea 0%, #8fd8be 50%, #3aa58a 100%); }
+  .browser { position: absolute; inset: 0; font-family: 'Segoe UI'; background: #fff; }
+  .bar { height: 44px; background: #f1f3f6; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: 1px solid #e3e6ea; }
+  .bar .url { flex: 1; height: 30px; border-radius: 15px; background: #fff; border: 1px solid #dde1e6; display: flex; align-items: center; padding: 0 14px; font-size: 14px; color: #444; }
+  .page { padding: 26px 40px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; }
+  .hero-img { height: 300px; border-radius: 14px; background: linear-gradient(135deg,#ffd9a0,#f4a261); position: relative; overflow: hidden; }
+  h2 { font-size: 34px; color: #2b2b2b; margin-bottom: 10px; }
+  .line { height: 12px; border-radius: 6px; background: #e9ecef; margin: 12px 0; }
+  .chip { display: inline-block; padding: 6px 12px; border-radius: 14px; background: #fff1e0; color: #b8661f; font-size: 14px; margin: 0 6px 8px 0; }
+  .pok { position: absolute; display: grid; place-items: center; font-family: 'Fredoka'; font-weight: 700; color: #1F2240; background: #F4C542;
+    clip-path: polygon(50% 0, 61% 26%, 92% 12%, 76% 40%, 100% 54%, 72% 62%, 82% 96%, 54% 74%, 36% 100%, 32% 70%, 4% 84%, 20% 56%, 0 36%, 28% 34%, 18% 6%, 42% 24%); }
+  .shadow { position: absolute; height: 16px; border-radius: 50%; background: rgba(0,0,0,.2); }
+  .speed { position: absolute; height: 6px; border-radius: 3px; background: rgba(255,255,255,.9); }
+</style></head>
+<body>
+  <div class="wall"></div>
+  <div id="icons"></div>
+  <div id="wins"></div>
+  <div id="pet"></div>
+  <div class="note" style="right:60px;top:300px;font-size:66px;text-align:right">¡Si lo pinchas, sale volando!<small>…y luego se marea y ve estrellitas ★</small></div>
+  <div id="arrow"></div>
+  <div id="tag"></div>
+  <div id="chrome"></div>
+  <script src="pixel.js"></script><script src="credits.js"></script><script src="desktop.js"></script>
+  <script>
+    document.getElementById('icons').innerHTML = desktopIcons([
+      ['Papelera', 'rgba(255,255,255,.4)'],
+      ['Clawd', '#DD775B', '<img src="sprites/idle.png" style="width:38px">'],
+      ['Recetas', '#e4572e'],
+    ]);
+    document.getElementById('wins').innerHTML = windowFrame({ x: 150, y: 50, w: 1080, h: 820, title: 'Tortitas de la abuela · Navegador', icon: '#14a3b8', body:
+      `<div class="browser"><div class="bar"><span>‹</span><span>›</span><span>⟳</span><div class="url">🔒 recetas-de-la-abuela.es/tortitas</div></div>
+        <div class="page">
+          <div><div class="hero-img">
+            <div style="position:absolute;left:50%;top:52%;transform:translate(-50%,-50%)">${pixelSVG(['....OOOOOO....', '..OOYYYYYYOO..', '.OYYYYYYYYYYO.', 'OYYYYYYYYYYYYO', 'OOYYYYYYYYYYOO', '.OOOOOOOOOOOO.', '..OOOOOOOOOO..'], 22, { ...PX, O: '#c9762f', Y: '#f4c542' })}</div>
+          </div></div>
+          <div><h2>Tortitas esponjosas</h2>
+            <span class="chip">20 min</span><span class="chip">4 personas</span><span class="chip">Fácil</span>
+            <div class="line" style="width:92%"></div><div class="line" style="width:80%"></div><div class="line" style="width:86%"></div>
+            <div class="line" style="width:60%"></div><div class="line" style="width:90%"></div><div class="line" style="width:74%"></div>
+            <div class="line" style="width:84%"></div><div class="line" style="width:52%"></div></div>
+          <div><h3 style="font-size:24px;margin:6px 0 10px">Ingredientes</h3>${['250 g de harina', '2 huevos', '300 ml de leche', '2 cucharadas de azúcar', 'Una pizca de sal', 'Mantequilla para la sartén'].map(t => `<div style="font-size:16px;color:#444;padding:6px 0;border-bottom:1px solid #f0f0f0">• ${t}</div>`).join('')}</div>
+          <div><h3 style="font-size:24px;margin:6px 0 10px">Preparación</h3>${[1,2,3].map(n => `<div style="display:flex;gap:12px;margin:8px 0"><b style="width:28px;height:28px;border-radius:50%;background:#f4a261;color:#fff;display:grid;place-items:center;font-size:14px;flex:none">${n}</b><div style="flex:1"><div class="line" style="width:95%;margin:6px 0"></div><div class="line" style="width:70%;margin:6px 0"></div></div></div>`).join('')}</div>
+        </div></div>` });
+
+    const petW = 230, right = 120, lift = 120; // in the air above its home spot
+    const left = 1920 - right - petW;
+    document.getElementById('pet').innerHTML = `
+      <div class="shadow" style="left:${left + 30}px;bottom:52px;width:${petW - 60}px"></div>
+      <div class="speed" style="left:${left - 90}px;top:${1080 - 48 - lift - 150}px;width:70px"></div>
+      <div class="speed" style="left:${left - 120}px;top:${1080 - 48 - lift - 120}px;width:100px"></div>
+      <div class="speed" style="left:${left - 80}px;top:${1080 - 48 - lift - 90}px;width:60px"></div>
+      <img class="px" src="sprites/hitair.png" style="position:absolute;left:${left}px;bottom:${48 + lift}px;width:${petW}px;transform:rotate(-4deg)">
+      <div class="pok" style="left:${left + petW - 40}px;bottom:${48 + lift + 120}px;width:150px;height:118px;font-size:38px">¡POK!</div>
+      <div style="position:absolute;left:${left + petW - 30}px;bottom:${48 + lift + 10}px;transform:rotate(-14deg)">${pixelSVG(ART.cursor, 3.2)}</div>`;
+    document.getElementById('arrow').innerHTML = arrow(1560, 440, 1640, 650, 60);
+    document.getElementById('tag').innerHTML = creditTag();
+    document.getElementById('chrome').innerHTML = desktopChrome({ time: '19:30', date: '25/10/2026', openApps: [0, 5] });
+  </script>
+</body></html>

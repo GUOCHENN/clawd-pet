@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Escritorio 2 · Te sigue el ratón</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="desktop.css">
+<style>
+  .wall { background:
+    radial-gradient(40% 50% at 78% 28%, #ffe3a6 0%, rgba(255,227,166,0) 70%),
+    linear-gradient(180deg, #ffb48a 0%, #f58f8f 38%, #a974c9 72%, #5b4fa8 100%); }
+  .hills { position: absolute; left: 0; right: 0; bottom: 0; height: 420px;
+    background:
+      radial-gradient(120% 90% at 20% 100%, #4b3f8f 0 55%, transparent 56%),
+      radial-gradient(110% 80% at 85% 100%, #3a3178 0 52%, transparent 53%); }
+  .explorer { position: absolute; inset: 0; display: flex; font-family: 'Segoe UI'; }
+  .nav { width: 210px; background: #f7f7f9; padding: 14px 0; font-size: 14px; color: #444; border-right: 1px solid #eee; }
+  .nav div { padding: 7px 20px; } .nav .on { background: #e6eefc; color: #1b4fb8; font-weight: 600; }
+  .files { flex: 1; padding: 18px 22px; }
+  .crumb { font-size: 14px; color: #666; margin-bottom: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .ph { height: 112px; border-radius: 8px; position: relative; overflow: hidden; }
+  .ph span { position: absolute; left: 0; right: 0; bottom: -24px; font-size: 12px; text-align: center; color: #333; }
+  .cell { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: #333; text-align: center; }
+  .ghost { position: absolute; }
+</style></head>
+<body>
+  <div class="wall"></div><div class="hills"></div>
+  <div id="icons"></div>
+  <div id="wins"></div>
+  <div id="pet"></div>
+  <div class="note" style="left:300px;top:700px;font-size:64px">¡Me sigue a todas partes!<small>modo «seguir al ratón»: corre detrás del cursor</small></div>
+  <div id="tag"></div>
+  <div id="chrome"></div>
+  <script src="pixel.js"></script><script src="credits.js"></script><script src="desktop.js"></script>
+  <script>
+    document.getElementById('icons').innerHTML = desktopIcons([
+      ['Papelera', 'rgba(255,255,255,.35)'],
+      ['Clawd', '#DD775B', '<img src="sprites/idle.png" style="width:38px">'],
+      ['Música', '#8b5cf6'],
+    ]);
+    const tiles = [
+      ['Playa', 'linear-gradient(180deg,#8ec5e8 0 55%,#f4d58d 55%)'],
+      ['Cumpleaños', 'linear-gradient(135deg,#f2a7b5,#ffd3a6)'],
+      ['Montaña', 'linear-gradient(180deg,#bfe0ff 0 45%,#7dc6a2 45%)'],
+      ['Navidad', 'linear-gradient(135deg,#d94c3d,#2b8a57)'],
+      ['La abuela', 'linear-gradient(135deg,#e8d7c3,#c9974f)'],
+      ['El perro', 'linear-gradient(135deg,#a98b6d,#e9d3b3)'],
+      ['Cena', 'linear-gradient(135deg,#ffb48a,#f4c542)'],
+      ['Paseo', 'linear-gradient(180deg,#ffe3a6 0 50%,#9ed8b8 50%)'],
+    ];
+    document.getElementById('wins').innerHTML = windowFrame({ x: 180, y: 70, w: 900, h: 540, title: 'Fotos de familia', icon: '#f2b33d', body:
+      `<div class="explorer"><div class="nav"><div>⭐ Inicio</div><div>🖥 Escritorio</div><div>⬇ Descargas</div><div class="on">🖼 Fotos de familia</div><div>🎵 Música</div><div>📁 Vacaciones 2026</div></div>
+       <div class="files"><div class="crumb">Este equipo › Imágenes › Fotos de familia</div>
+       <div class="grid">${tiles.map(([n, bg]) => `<div class="cell"><div class="ph" style="background:${bg}"></div>${n}.jpg</div>`).join('')}</div></div></div>` });
+
+    // Clawd running right toward the cursor, with a fading trail behind it
+    const w = 210, x = 1360, y = 560;
+    let pet = '';
+    [[-170, 0.14], [-110, 0.26], [-55, 0.45]].forEach(([dx, op]) => {
+      pet += `<img class="ghost px" src="sprites/run.png" style="left:${x + dx}px;top:${y + 6}px;width:${w}px;opacity:${op}">`;
+    });
+    pet += `<img class="ghost px" src="sprites/run.png" style="left:${x}px;top:${y}px;width:${w}px">`;
+    pet += `<div class="ghost" style="left:${x + 300}px;top:${y - 40}px;transform:rotate(-6deg)">${pixelSVG(ART.cursor, 3.2)}</div>`;
+    document.getElementById('pet').innerHTML = pet;
+    document.getElementById('tag').innerHTML = creditTag();
+    document.getElementById('chrome').innerHTML = desktopChrome({ time: '16:05', date: '25/10/2026', openApps: [0] });
+  </script>
+</body></html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Escritorio 4 · Buenas noches</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="desktop.css">
+<style>
+  .wall { background:
+    radial-gradient(30% 40% at 76% 26%, rgba(255,231,163,.22) 0%, rgba(255,231,163,0) 70%),
+    linear-gradient(180deg, #0f1430 0%, #1c2457 55%, #2f3a7a 100%); }
+  .star { position: absolute; background: #fff; border-radius: 1px; }
+  .moon { position: absolute; left: 1380px; top: 150px; width: 150px; height: 150px; border-radius: 50%; box-shadow: -34px 14px 0 0 #ffe7a3; }
+  .player { position: absolute; inset: 0; display: flex; gap: 22px; padding: 22px; color: #e8eaf6; font-family: 'Segoe UI'; }
+  .cover { width: 170px; height: 170px; border-radius: 12px; background: linear-gradient(135deg, #3b3f8f, #8579e0); display: grid; place-items: center; flex: none; }
+  .meta { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .meta b { font-size: 24px; } .meta span { font-size: 15px; color: #9aa0c8; margin-top: 4px; }
+  .prog { margin-top: 22px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.15); position: relative; }
+  .prog i { position: absolute; left: 0; top: 0; bottom: 0; width: 64%; border-radius: 3px; background: #8579e0; }
+  .ctrls { margin-top: 16px; display: flex; gap: 26px; font-size: 22px; color: #cfd3f3; }
+</style></head>
+<body>
+  <div class="wall"></div><div id="stars"></div><div class="moon"></div>
+  <div id="icons"></div>
+  <div id="wins"></div>
+  <img class="pet px" src="sprites/sleepz.png" style="right:125px;width:196px">
+  <div class="note" style="right:420px;bottom:200px;font-size:66px;text-align:right">A medianoche… se queda dormido<small>¡buenas noches, Clawd!</small></div>
+  <div id="arrow"></div>
+  <div id="tag"></div>
+  <div id="chrome"></div>
+  <script src="pixel.js"></script><script src="credits.js"></script><script src="desktop.js"></script>
+  <script>
+    let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    document.getElementById('stars').innerHTML = Array.from({ length: 140 }, () => {
+      const s = rnd() < 0.15 ? 3 : 2;
+      return `<i class="star" style="left:${rnd() * 1920}px;top:${rnd() * 760}px;width:${s}px;height:${s}px;opacity:${0.35 + rnd() * 0.6}"></i>`;
+    }).join('');
+    document.getElementById('icons').innerHTML = desktopIcons([
+      ['Papelera', 'rgba(255,255,255,.18)'],
+      ['Clawd', '#DD775B', '<img src="sprites/idle.png" style="width:38px">'],
+      ['Música', '#8b5cf6'],
+    ]);
+    document.getElementById('wins').innerHTML = windowFrame({ x: 220, y: 400, w: 720, h: 260, title: 'Música', icon: '#8b5cf6', dark: true, body:
+      `<div class="player"><div class="cover">${pixelSVG(ART.note, 22, { ...PX, K: '#ffffff' })}</div>
+        <div class="meta"><b>Canción de cuna (8-bit)</b><span>Reproduciendo · Clawd Music</span>
+          <div class="prog"><i></i></div><div class="ctrls"><span>⏮</span><span>⏸</span><span>⏭</span><span style="margin-left:auto;font-size:16px">2:41 / 4:10</span></div></div></div>` });
+    document.getElementById('arrow').innerHTML = arrow(1460, 900, 1600, 960, 60);
+    document.getElementById('tag').innerHTML = creditTag();
+    document.getElementById('chrome').innerHTML = desktopChrome({ time: '23:47', date: '25/10/2026', dark: true, openApps: [4] });
+  </script>
+</body></html>

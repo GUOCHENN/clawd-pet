@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clawd · El pequeño que vive en mi escritorio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&family=Silkscreen:wght@400;700&display=block" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EEDF; --paper2: #EFE4CF; --ink: #1F2240; --ink2: #3A3E6B;
+    --clawd: #DD775B; --clawd-dark: #B95C43; --sun: #F4C542; --sky: #8EC5E8; --mint: #9ED8B8; --pink: #F2A7B5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body {
+    position: relative;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(31, 34, 64, 0.09) 1.2px, transparent 1.6px) 0 0 / 22px 22px,
+      linear-gradient(180deg, #F8F2E6 0%, var(--paper) 45%, #F1E5CF 100%);
+    color: var(--ink);
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+  }
+  .abs { position: absolute; }
+  .px { image-rendering: pixelated; display: block; }
+
+  /* ---------- header ---------- */
+  .topbar { left: 64px; right: 64px; top: 56px; display: flex; justify-content: space-between; align-items: center; }
+  .pill {
+    font-family: 'Silkscreen', monospace; font-size: 22px; letter-spacing: 1px;
+    background: var(--ink); color: var(--paper); padding: 10px 20px 8px; border-radius: 6px;
+    box-shadow: 4px 4px 0 var(--clawd);
+  }
+  .hearts { display: flex; gap: 10px; }
+  .title { left: 0; right: 0; top: 128px; display: flex; justify-content: center; filter: drop-shadow(13px 13px 0 #1F2240); }
+  .sub {
+    left: 60px; right: 60px; top: 362px; text-align: center;
+    font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 56px; line-height: 1.05; color: var(--ink); white-space: nowrap;
+  }
+  .sub em { font-style: normal; color: var(--clawd); }
+  .tagline {
+    left: 110px; right: 110px; top: 440px; text-align: center;
+    font-size: 29px; font-weight: 700; color: var(--ink2); line-height: 1.35;
+  }
+  .spark { position: absolute; }
+
+  /* ---------- hero monitor ---------- */
+  .monitor {
+    left: 90px; top: 540px; width: 900px; height: 520px;
+    background: var(--ink); border-radius: 34px; padding: 26px;
+    box-shadow: 0 18px 0 #14162d, 0 30px 60px rgba(31, 34, 64, 0.28);
+  }
+  .screen {
+    position: relative; width: 100%; height: 100%; border-radius: 14px; overflow: hidden;
+    background: linear-gradient(180deg, #FFD9B8 0%, #FBC4A8 32%, #C9D8F2 70%, #A9C8EE 100%);
+  }
+  .sun-disc { position: absolute; left: 560px; top: 70px; width: 150px; height: 150px; border-radius: 50%; background: #FFE7A3; box-shadow: 0 0 0 18px rgba(255, 231, 163, 0.35); }
+  .hill1 { position: absolute; left: -60px; right: -60px; bottom: 52px; height: 150px; background: #9ED8B8; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+  .hill2 { position: absolute; left: 380px; right: -120px; bottom: 52px; height: 190px; background: #7DC6A2; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+  .icons { position: absolute; left: 30px; top: 28px; display: flex; flex-direction: column; gap: 22px; }
+  .icon { display: flex; flex-direction: column; align-items: center; width: 92px; gap: 6px; }
+  .icon span { font-size: 17px; font-weight: 800; color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 6px rgba(0,0,0,.25); }
+  .taskbar {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 52px;
+    background: rgba(31, 34, 64, 0.88); display: flex; align-items: center; padding: 0 16px; gap: 14px;
+  }
+  .start { width: 30px; height: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+  .start i { background: var(--sky); border-radius: 2px; }
+  .start i:nth-child(2) { background: var(--sun); } .start i:nth-child(3) { background: var(--mint); } .start i:nth-child(4) { background: var(--clawd); }
+  .search { width: 210px; height: 30px; border-radius: 15px; background: rgba(255,255,255,.14); }
+  .clock { margin-left: auto; font-family: 'Silkscreen', monospace; color: #fff; font-size: 20px; text-align: right; line-height: 1.05; }
+  .clock small { display: block; font-size: 13px; opacity: .75; }
+  .hero-clawd { position: absolute; right: 128px; bottom: 112px; width: 262px; transform: rotate(-4deg); }
+  .air-shadow { position: absolute; right: 160px; bottom: 58px; width: 210px; height: 22px; border-radius: 50%; background: rgba(31, 34, 64, 0.22); }
+  .speed { position: absolute; height: 7px; border-radius: 4px; background: rgba(255,255,255,.85); }
+  .cursor { position: absolute; right: 66px; bottom: 150px; transform: rotate(-14deg); }
+  .pok {
+    position: absolute; right: 16px; bottom: 262px; width: 160px; height: 128px;
+    display: grid; place-items: center; font-family: 'Fredoka'; font-weight: 700; font-size: 40px; color: var(--ink);
+    background: var(--sun);
+    clip-path: polygon(50% 0, 61% 26%, 92% 12%, 76% 40%, 100% 54%, 72% 62%, 82% 96%, 54% 74%, 36% 100%, 32% 70%, 4% 84%, 20% 56%, 0 36%, 28% 34%, 18% 6%, 42% 24%);
+  }
+  .bubble {
+    position: absolute; left: 150px; top: 30px; padding: 14px 22px; background: #fff; border-radius: 22px;
+    font-family: 'Fredoka'; font-weight: 600; font-size: 31px; color: var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    border: 3px solid var(--ink);
+  }
+  .bubble::after {
+    content: ''; position: absolute; right: 26px; bottom: -22px; width: 30px; height: 30px; background: #fff;
+    border-right: 3px solid var(--ink); border-bottom: 3px solid var(--ink); transform: rotate(45deg) skew(10deg, 10deg);
+  }
+  .stand { left: 470px; top: 1076px; width: 140px; height: 44px; background: var(--ink2); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); }
+  .base { left: 400px; top: 1116px; width: 280px; height: 16px; background: var(--ink2); border-radius: 8px; }
+
+  /* ---------- a day with Clawd ---------- */
+  .sec-title {
+    left: 64px; right: 64px; display: flex; align-items: center; gap: 18px;
+    font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 30px; letter-spacing: 1px; color: var(--ink);
+  }
+  .sec-title::after { content: ''; flex: 1; height: 6px; background: repeating-linear-gradient(90deg, var(--ink) 0 12px, transparent 12px 20px); }
+  .film {
+    left: 40px; right: 40px; top: 1214px; height: 272px; background: var(--ink); border-radius: 18px;
+    padding: 34px 22px; display: flex; gap: 14px;
+  }
+  .film::before, .film::after {
+    content: ''; position: absolute; left: 26px; right: 26px; height: 12px;
+    background: repeating-linear-gradient(90deg, var(--paper) 0 18px, transparent 18px 40px); border-radius: 3px; opacity: .9;
+  }
+  .film::before { top: 11px; } .film::after { bottom: 11px; }
+  .frame { flex: 1; background: var(--paper); border-radius: 10px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 10px 6px 12px; overflow: hidden; }
+  .frame .time { position: absolute; top: 9px; left: 10px; font-family: 'Silkscreen'; font-size: 17px; background: var(--ink); color: var(--paper); padding: 3px 7px 2px; border-radius: 4px; }
+  .frame .art { flex: 1; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding-top: 30px; }
+  .frame .art img { max-width: 92%; max-height: 132px; object-fit: contain; }
+  .frame b { font-family: 'Fredoka'; font-weight: 700; font-size: 27px; margin-top: 8px; }
+  .frame.night { background: #2E3263; } .frame.night b { color: #fff; } .frame.night .time { background: var(--sun); color: var(--ink); }
+  .moon { position: absolute; right: 12px; top: 10px; width: 26px; height: 26px; border-radius: 50%; box-shadow: -7px 3px 0 0 #FFE7A3; }
+
+  /* ---------- how to play ---------- */
+  .tips { left: 64px; right: 64px; top: 1566px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .tip { display: flex; align-items: center; gap: 16px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 10px 18px; box-shadow: 5px 5px 0 var(--ink); }
+  .tip img { width: 86px; height: 70px; object-fit: contain; flex: none; }
+  .tip h3 { font-family: 'Fredoka'; font-weight: 700; font-size: 29px; line-height: 1; margin-bottom: 4px; }
+  .tip p { font-size: 20px; font-weight: 700; color: var(--ink2); line-height: 1.2; }
+  .tip:nth-child(1) { background: #FFE9DF; } .tip:nth-child(2) { background: #E3F1FB; } .tip:nth-child(3) { background: #EEE8FD; } .tip:nth-child(4) { background: #E4F5EC; }
+
+  /* ---------- credits ---------- */
+  .credits { left: 64px; right: 64px; top: 1806px; }
+</style>
+</head>
+<body>
+  <div class="abs topbar">
+    <div class="pill">PROYECTO ORIGINAL · #001</div>
+    <div class="hearts" id="hearts"></div>
+  </div>
+
+  <div class="abs title" id="title"></div>
+  <div class="abs sub">El pequeño que vive en <em>mi escritorio</em></div>
+  <div class="abs tagline">Pasea, entrena, cocina, se marea si lo pinchas…<br>¡y tiene 11 disfraces!</div>
+
+  <div class="abs monitor">
+    <div class="screen">
+      <div class="sun-disc"></div>
+      <div class="abs" style="left:300px;top:52px" id="cloud1"></div>
+      <div class="abs" style="left:640px;top:200px;opacity:.85" id="cloud2"></div>
+      <div class="hill1"></div><div class="hill2"></div>
+      <div class="icons">
+        <div class="icon" id="ic1"><span>Tareas</span></div>
+        <div class="icon" id="ic2"><span>Fotos</span></div>
+        <div class="icon" id="ic3"><span>Música</span></div>
+      </div>
+      <div class="bubble">¡Ay! ¡No me pinches!</div>
+      <div class="air-shadow"></div>
+      <div class="speed" style="left:350px;top:250px;width:70px"></div><div class="speed" style="left:318px;top:282px;width:100px"></div><div class="speed" style="left:360px;top:314px;width:60px"></div>
+      <img class="hero-clawd px" src="sprites/hitair.png" alt="">
+      <div class="pok">¡POK!</div>
+      <div class="cursor" id="cursor"></div>
+      <div class="taskbar">
+        <div class="start"><i></i><i></i><i></i><i></i></div>
+        <div class="search"></div>
+        <div class="clock">20:26<small>25/10/2026</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="abs stand"></div>
+  <div class="abs base"></div>
+
+  <div class="abs sec-title" style="top:1160px">UN DÍA CON CLAWD</div>
+  <div class="abs film">
+    <div class="frame"><span class="time">08:00</span><div class="art"><img class="px" src="sprites/typing.png"></div><b>Programa</b></div>
+    <div class="frame"><span class="time">12:00</span><div class="art"><img class="px" src="sprites/chef.png"></div><b>Cocina</b></div>
+    <div class="frame"><span class="time">16:00</span><div class="art"><img class="px" src="sprites/skate.png"></div><b>Patina</b></div>
+    <div class="frame"><span class="time">19:00</span><div class="art"><img class="px" src="sprites/gym.png"></div><b>Entrena</b></div>
+    <div class="frame night"><span class="time">23:00</span><span class="moon"></span><div class="art"><img class="px" src="sprites/sleepz.png"></div><b>A dormir</b></div>
+  </div>
+
+  <div class="abs sec-title" style="top:1512px">CÓMO JUGAR CON ÉL</div>
+  <div class="abs tips">
+    <div class="tip"><img class="px" src="sprites/faint.png"><div><h3>Pínchalo</h3><p>Sale volando y ve estrellitas.</p></div></div>
+    <div class="tip"><img class="px" src="sprites/run.png"><div><h3>Te sigue</h3><p>Corre detrás de tu ratón.</p></div></div>
+    <div class="tip"><img class="px" src="sprites/wizard.png"><div><h3>Se disfraza</h3><p>11 trajes que se pone solo.</p></div></div>
+    <div class="tip"><img class="px" src="sprites/cool.png"><div><h3>Discreto</h3><p>Si juegas, se esconde.</p></div></div>
+  </div>
+
+  <div class="abs credits" id="credits"></div>
+
+  <script src="pixel.js"></script>
+  <script src="credits.js"></script>
+  <script>
+    document.getElementById('title').innerHTML = pixelWord('CLAWD', 26, '#DD775B', '#1F2240', 0);
+    document.getElementById('hearts').innerHTML = [ART.heart, ART.heart, ART.heart].map((h) => pixelSVG(h, 6)).join('');
+    document.getElementById('cloud1').innerHTML = pixelSVG(ART.cloud, 9);
+    document.getElementById('cloud2').innerHTML = pixelSVG(ART.cloud, 6);
+    document.getElementById('cursor').innerHTML = pixelSVG(ART.cursor, 7);
+    ['ic1', 'ic2', 'ic3'].forEach((id, i) => {
+      document.getElementById(id).insertAdjacentHTML('afterbegin', pixelSVG([ART.folder, ART.photo, ART.folder][i], 6));
+    });
+    // a few sparkles around the title
+    [[150, 200, 7], [905, 180, 9], [860, 300, 5], [210, 315, 5]].forEach(([x, y, s]) => {
+      document.body.insertAdjacentHTML('beforeend', `<div class="spark" style="left:${x}px;top:${y}px">${pixelSVG(ART.sparkle, s)}</div>`);
+    });
+    renderCredits(document.getElementById('credits'));
+  </script>
+</body>
+</html>

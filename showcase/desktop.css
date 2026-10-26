@@ -1,0 +1,61 @@
+/* Windows 11-style desktop mockup, 1920x1080. Generic shapes only (no real app logos). */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; }
+body { position: relative; font-family: 'Segoe UI Variable Text', 'Segoe UI', sans-serif; color: #1b1b1f; }
+.abs { position: absolute; }
+.px { image-rendering: pixelated; }
+
+.wall { position: absolute; inset: 0; }
+
+/* desktop icons */
+.dicons { position: absolute; left: 14px; top: 12px; display: grid; grid-auto-flow: row; gap: 14px; }
+.dicon { width: 86px; display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+.dicon .g { width: 48px; height: 48px; border-radius: 10px; display: grid; place-items: center; }
+.dicon span { color: #fff; font-size: 13px; line-height: 1.2; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+
+/* windows */
+.win { position: absolute; border-radius: 9px; overflow: hidden; background: #fff; box-shadow: 0 20px 50px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.08); }
+.win.dark { background: #1f2129; box-shadow: 0 20px 50px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06); }
+.tb { height: 34px; display: flex; align-items: center; padding-left: 14px; gap: 10px; font-size: 13px; background: #f3f3f3; }
+.dark .tb { background: #15161c; color: #c9ccd8; }
+.tb .ico { width: 16px; height: 16px; border-radius: 4px; }
+.tb .title { flex: 1; }
+.tb .ctl { display: flex; height: 100%; }
+.tb .ctl i { width: 46px; display: grid; place-items: center; font-style: normal; font-size: 13px; color: inherit; opacity: .8; }
+
+/* taskbar */
+.taskbar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 48px;
+  background: rgba(238, 240, 246, 0.82); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,.5);
+  display: flex; align-items: center; justify-content: center;
+}
+.taskbar.dark { background: rgba(28, 30, 40, 0.86); border-top-color: rgba(255,255,255,.06); color: #fff; }
+.tapps { display: flex; gap: 6px; align-items: center; }
+.tapp { width: 40px; height: 40px; border-radius: 6px; display: grid; place-items: center; position: relative; }
+.tapp.on::after { content: ''; position: absolute; bottom: 2px; width: 16px; height: 3px; border-radius: 2px; background: #3b7be8; }
+.tapp .g { width: 24px; height: 24px; border-radius: 6px; }
+.startbtn { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: 22px; height: 22px; }
+.startbtn i { background: #3b7be8; border-radius: 2px; }
+.searchbox { width: 220px; height: 34px; border-radius: 17px; background: rgba(255,255,255,.75); display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 13px; color: #555; margin: 0 4px; }
+.dark .searchbox { background: rgba(255,255,255,.08); color: #aaa; }
+.tray { position: absolute; right: 12px; top: 0; height: 48px; display: flex; align-items: center; gap: 14px; font-size: 12px; }
+.tray .clock { text-align: right; line-height: 1.35; }
+.tray svg { display: block; }
+
+/* the pet window region: bottom-right, above the taskbar, like the real app */
+.pet { position: absolute; bottom: 48px; }
+
+/* handwritten annotation */
+.note {
+  position: absolute; font-family: 'Caveat', cursive; font-weight: 700; color: #ffb547;
+  text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 0 18px rgba(0,0,0,.35); line-height: 1.05;
+}
+.note small { display: block; font-size: .55em; color: #fff; font-weight: 600; margin-top: 6px; }
+.arrow { position: absolute; overflow: visible; }
+
+/* credit tag */
+.tag {
+  position: absolute; left: 24px; bottom: 64px; padding: 8px 14px; border-radius: 10px;
+  background: rgba(20, 22, 40, .55); color: #fff; font-size: 15px; backdrop-filter: blur(6px);
+}
+.tag b { color: #ffb547; }

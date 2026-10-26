@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Escritorio 1 · Programando con Clawd</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="desktop.css">
+<style>
+  .wall { background:
+    radial-gradient(60% 80% at 75% 70%, #7aa7ff 0%, rgba(122,167,255,0) 60%),
+    radial-gradient(50% 70% at 30% 30%, #b9a7ff 0%, rgba(185,167,255,0) 60%),
+    radial-gradient(70% 90% at 55% 110%, #3c6fe0 0%, rgba(60,111,224,0) 70%),
+    linear-gradient(160deg, #dfe8ff 0%, #a9c1f5 45%, #6f8fe0 100%); }
+  .code { position: absolute; inset: 0; display: flex; font: 15px/1.62 'Cascadia Mono', Consolas, monospace; color: #d4d7e3; }
+  .side { width: 220px; background: #191a21; padding: 14px 0; font-family: 'Segoe UI'; font-size: 13px; color: #9aa0b8; }
+  .side div { padding: 4px 18px; } .side .on { background: #2a2c38; color: #fff; }
+  .gutter { width: 54px; text-align: right; padding: 14px 12px 0 0; color: #4d5168; }
+  .src { padding: 14px 0 0 14px; white-space: pre; }
+  .k { color: #c792ea; } .s { color: #c3e88d; } .n { color: #f78c6c; } .f { color: #82aaff; } .c { color: #676e95; font-style: italic; } .p { color: #89ddff; }
+  .notes .tb { background: #fff7d6; }
+</style></head>
+<body>
+  <div class="wall"></div>
+  <div id="icons"></div>
+  <div id="wins"></div>
+  <img class="pet px" src="sprites/typing.png" style="right:128px;width:190px">
+  <div class="note" style="right:70px;bottom:236px;font-size:62px;text-align:right">¡Clawd programa conmigo!<small>vive aquí, encima de la barra de tareas</small></div>
+  <div id="arrow"></div>
+  <div id="tag"></div>
+  <div id="chrome"></div>
+  <script src="pixel.js"></script><script src="credits.js"></script><script src="desktop.js"></script>
+  <script>
+    document.getElementById('icons').innerHTML = desktopIcons([
+      ['Papelera', 'rgba(255,255,255,.35)'],
+      ['Clawd', '#DD775B', '<img src="sprites/idle.png" style="width:38px">'],
+      ['Proyecto', '#f2b33d'],
+      ['Fotos', '#2bb673'],
+    ]);
+    const code = `<span class="c">// Un pinchazo: golpe → salta → se marea → se recupera</span>
+<span class="k">poke</span>: {
+  label: <span class="s">'捉弄一下'</span>, weight: <span class="n">0</span>, svg: <span class="s">'walk'</span>,
+  <span class="f">run</span>({ b, dir, k = <span class="n">1</span> }) {
+    <span class="k">if</span> (state.standStill) <span class="k">return</span> <span class="f">pokeStanding</span>(k);
+    <span class="k">const</span> r = svgs.walk.rig;
+    <span class="k">const</span> jumpH = <span class="n">55</span> + <span class="n">9</span> * k;
+    <span class="k">const</span> tl = gsap.<span class="f">timeline</span>();
+
+    <span class="c">// golpe</span>
+    tl.<span class="f">call</span>(sfx.bonk, [k], <span class="n">0</span>)
+      .<span class="f">set</span>(r.squint, { attr: { opacity: <span class="n">1</span> } }, <span class="n">0</span>)
+      .<span class="f">to</span>(r.body, { scaleX: <span class="n">1.22</span>, scaleY: <span class="n">0.7</span> }, <span class="n">0</span>);
+
+    <span class="c">// salto</span>
+    tl.<span class="f">addLabel</span>(<span class="s">'bounce'</span>, <span class="n">0.32</span>)
+      .<span class="f">call</span>(sfx.boing, [k], <span class="s">'bounce'</span>)
+      .<span class="f">to</span>(r.group, { y: -jumpH, duration: <span class="n">0.28</span> }, <span class="s">'bounce'</span>);
+
+    <span class="c">// se marea ★</span>
+    tl.<span class="f">addLabel</span>(<span class="s">'faint'</span>, <span class="s">'land+=0.12'</span>)
+      .<span class="f">call</span>(sfx.dizzy, [k], <span class="s">'faint'</span>);
+    <span class="k">return</span> tl;
+  },
+},`;
+    const lines = code.split('\n').length;
+    document.getElementById('wins').innerHTML =
+      windowFrame({ x: 1330, y: 120, w: 500, h: 330, title: 'Notas', icon: '#f2b33d', body:
+        `<div style="padding:18px 22px;font:16px/1.7 'Segoe UI';color:#333">
+          <b style="font-size:19px">Ideas para Clawd</b><br>✔ que se maree si lo pincho<br>✔ 11 disfraces<br>✔ que me siga el ratón<br>✔ esconderse si juego<br>☐ enseñárselo a la familia</div>` }) +
+      windowFrame({ x: 190, y: 56, w: 1060, h: 720, title: 'pet.js — proyecto-clawd', icon: '#3b7be8', dark: true, body:
+        `<div class="code"><div class="side"><div>📁 clawd-pet</div><div>&nbsp;&nbsp;main.js</div><div>&nbsp;&nbsp;fullscreen.js</div><div>&nbsp;&nbsp;📁 renderer</div><div>&nbsp;&nbsp;&nbsp;&nbsp;costumes.js</div><div class="on">&nbsp;&nbsp;&nbsp;&nbsp;pet.js</div><div>&nbsp;&nbsp;&nbsp;&nbsp;sfx.js</div><div>&nbsp;&nbsp;&nbsp;&nbsp;style.css</div></div>
+         <div class="gutter">${Array.from({ length: lines }, (_, i) => 466 + i).join('<br>')}</div><div class="src">${code}</div></div>` });
+    document.getElementById('arrow').innerHTML = arrow(1420, 880, 1590, 950, 70);
+    document.getElementById('tag').innerHTML = creditTag();
+    document.getElementById('chrome').innerHTML = desktopChrome({ time: '10:24', date: '25/10/2026', openApps: [0, 1] });
+  </script>
+</body></html>
