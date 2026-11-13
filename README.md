@@ -34,8 +34,6 @@ Todo se controla con **clic derecho** sobre Clawd. (Por ahora el menú está en 
 
 ## Galería
 
-*(Capturas de la versión 1.0, antes del estilo pixel art.)*
-
 | | |
 |---|---|
 | ![Te sigue el ratón](docs/images/Clawd-escritorio-2.png) | ![¡Pínchalo!](docs/images/Clawd-escritorio-3.png) |

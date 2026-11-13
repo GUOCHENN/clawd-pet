@@ -55,9 +55,9 @@
     const w = 210, x = 1360, y = 560;
     let pet = '';
     [[-170, 0.14], [-110, 0.26], [-55, 0.45]].forEach(([dx, op]) => {
-      pet += `<img class="ghost px" src="sprites/run.png" style="left:${x + dx}px;top:${y + 6}px;width:${w}px;opacity:${op}">`;
+      pet += `<img class="ghost px" data-art="5" src="sprites/run.png" style="left:${x + dx}px;top:${y + 6}px;opacity:${op}">`;
     });
-    pet += `<img class="ghost px" src="sprites/run.png" style="left:${x}px;top:${y}px;width:${w}px">`;
+    pet += `<img class="ghost px" data-art="5" src="sprites/run.png" style="left:${x}px;top:${y}px">`;
     pet += `<div class="ghost" style="left:${x + 300}px;top:${y - 40}px;transform:rotate(-6deg)">${pixelSVG(ART.cursor, 3.2)}</div>`;
     document.getElementById('pet').innerHTML = pet;
     document.getElementById('tag').innerHTML = creditTag();

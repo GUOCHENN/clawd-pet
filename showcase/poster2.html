@@ -61,8 +61,8 @@
   <div class="abs stats">
     <div class="stat"><b>19</b><span>acciones<br>diferentes</span></div>
     <div class="stat"><b>18</b><span>sonidos creados<br>con código</span></div>
-    <div class="stat"><b>1.782</b><span>píxeles de<br>disfraces</span></div>
-    <div class="stat"><b>1.880</b><span>líneas de<br>código</span></div>
+    <div class="stat"><b>3.432</b><span>píxeles de<br>disfraces</span></div>
+    <div class="stat"><b>2.245</b><span>líneas de<br>código</span></div>
   </div>
   <div class="abs credits" id="credits"></div>
 
@@ -74,20 +74,20 @@
       ['music', 'Melómano', 'Cascos puestos y cabeza al ritmo.', 2, '#CFE3F7'],
       ['typing', 'Programador', 'Teclea más rápido que tú.', 2, '#DDE3EA'],
       ['skate', 'Skater', 'Cruza la pantalla y hace un ollie.', 3, '#E9D3DA'],
-      ['detective', 'Detective', 'Lupa en mano… ¡pista encontrada!', 3, '#E6DCC9'],
+      ['detective', 'Detective', 'Lupa en mano… ¡una pista!', 3, '#E6DCC9'],
       ['builder', 'Obrero', 'Martillazos con chispas incluidas.', 2, '#FCE7B0'],
       ['chef', 'Chef', 'Voltea tortitas en el aire.', 3, '#F7E1CF'],
       ['cowboy', 'Vaquero', 'Gira el lazo y… ¡yija!', 3, '#E8D7C3'],
       ['wizard', 'Mago', 'Un toque de varita y ¡chispas!', 4, '#DCD6F7'],
-      ['astronaut', 'Astronauta', 'Flota sin gravedad por tu escritorio.', 4, '#CFD8F0'],
-      ['party', 'De fiesta', 'Una mecha encendida en la cabeza.', 2, '#FFE2C2'],
+      ['astronaut', 'Astronauta', 'Flota sin gravedad.', 4, '#CFD8F0'],
+      ['party', 'De fiesta', 'Mecha encendida… ¡bum!', 2, '#FFE2C2'],
       ['cool', 'Muy cool', 'Gafas de sol que caen del cielo.', 5, '#FFE8A3'],
     ];
     const star = pixelSVG(ART.star, 2.6);
     document.getElementById('grid').innerHTML = CARDS.map(([img, name, desc, rarity, tint], i) => `
       <div class="card${rarity === 5 ? ' legend' : ''}">
         <div class="head"><span class="num">#${String(i + 1).padStart(2, '0')}</span><span class="stars">${star.repeat(rarity)}</span></div>
-        <div class="art" style="background:${tint}"><img class="px" src="sprites/${img}.png"></div>
+        <div class="art" style="background:${tint}"><img class="px" data-group="cards" src="sprites/${img}.png"></div>
         <h3>${name}</h3>
         <p>${desc}</p>
       </div>`).join('');

@@ -51,14 +51,14 @@
           <div><h3 style="font-size:24px;margin:6px 0 10px">Preparación</h3>${[1,2,3].map(n => `<div style="display:flex;gap:12px;margin:8px 0"><b style="width:28px;height:28px;border-radius:50%;background:#f4a261;color:#fff;display:grid;place-items:center;font-size:14px;flex:none">${n}</b><div style="flex:1"><div class="line" style="width:95%;margin:6px 0"></div><div class="line" style="width:70%;margin:6px 0"></div></div></div>`).join('')}</div>
         </div></div>` });
 
-    const petW = 230, right = 120, lift = 120; // in the air above its home spot
+    const petW = 216, right = 120, lift = 120; // in the air above its home spot
     const left = 1920 - right - petW;
     document.getElementById('pet').innerHTML = `
       <div class="shadow" style="left:${left + 30}px;bottom:52px;width:${petW - 60}px"></div>
       <div class="speed" style="left:${left - 90}px;top:${1080 - 48 - lift - 150}px;width:70px"></div>
       <div class="speed" style="left:${left - 120}px;top:${1080 - 48 - lift - 120}px;width:100px"></div>
       <div class="speed" style="left:${left - 80}px;top:${1080 - 48 - lift - 90}px;width:60px"></div>
-      <img class="px" src="sprites/hitair.png" style="position:absolute;left:${left}px;bottom:${48 + lift}px;width:${petW}px;transform:rotate(-4deg)">
+      <img class="px" data-art="6" src="sprites/hitair.png" style="position:absolute;left:${left}px;bottom:${48 + lift}px">
       <div class="pok" style="left:${left + petW - 40}px;bottom:${48 + lift + 120}px;width:150px;height:118px;font-size:38px">¡POK!</div>
       <div style="position:absolute;left:${left + petW - 30}px;bottom:${48 + lift + 10}px;transform:rotate(-14deg)">${pixelSVG(ART.cursor, 3.2)}</div>`;
     document.getElementById('arrow').innerHTML = arrow(1560, 440, 1640, 650, 60);

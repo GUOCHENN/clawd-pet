@@ -64,3 +64,34 @@ const ART = {
   note: ['..KKK', '..K.K', '..K..', 'KKK..', 'KKK..'],
   photo: ['KKKKKKKKKK', 'KBBBBBBBYK', 'KBBBBBBBBK', 'KBBGBBBBBK', 'KBGGGBBGBK', 'KGGGGGGGGK', 'KKKKKKKKKK'],
 };
+
+// Sprites are exported at 16 image px per art pixel. Resize every img.px so one art pixel is a
+// whole number of half CSS px (whole device px at the 2x export): never bigger than the layout
+// gave it, or exactly data-art CSS px per art pixel when set. Keeps every pixel the same size.
+const ART_PX = 16;
+// Images sharing a data-group all take the smallest size of the group, so Clawd is the same
+// size in every frame of a strip.
+function snapPixels(root = document) {
+  const imgs = [...root.querySelectorAll('img.px')].filter((img) => img.naturalWidth);
+  const arts = imgs.map((img) => {
+    const fixed = Number(img.dataset.art);
+    if (fixed) return fixed;
+    const r = img.getBoundingClientRect();
+    const cur = Math.min(r.width / img.naturalWidth, (r.height || Infinity) / img.naturalHeight) * ART_PX;
+    return Math.max(0.5, Math.floor(cur * 2) / 2);
+  });
+  const groupMin = {};
+  imgs.forEach((img, i) => {
+    const g = img.dataset.group;
+    if (g) groupMin[g] = Math.min(groupMin[g] ?? Infinity, arts[i]);
+  });
+  imgs.forEach((img, i) => {
+    const art = img.dataset.group ? groupMin[img.dataset.group] : arts[i];
+    Object.assign(img.style, {
+      width: `${(img.naturalWidth / ART_PX) * art}px`, height: `${(img.naturalHeight / ART_PX) * art}px`,
+      maxWidth: 'none', maxHeight: 'none', objectFit: 'fill', imageRendering: 'pixelated',
+    });
+    img.dataset.snapped = art;
+  });
+}
+window.addEventListener('load', () => snapPixels());

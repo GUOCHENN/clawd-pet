@@ -20,8 +20,8 @@
   <div class="wall"></div>
   <div id="icons"></div>
   <div id="wins"></div>
-  <img class="pet px" src="sprites/typing.png" style="right:128px;width:190px">
-  <div class="note" style="right:70px;bottom:236px;font-size:62px;text-align:right">¡Clawd programa conmigo!<small>vive aquí, encima de la barra de tareas</small></div>
+  <img class="pet px" data-art="5" src="sprites/typing.png" style="right:110px">
+  <div class="note" style="right:70px;bottom:250px;font-size:62px;text-align:right">¡Clawd programa conmigo!<small>vive aquí, encima de la barra de tareas</small></div>
   <div id="arrow"></div>
   <div id="tag"></div>
   <div id="chrome"></div>
@@ -66,7 +66,7 @@
       windowFrame({ x: 190, y: 56, w: 1060, h: 720, title: 'pet.js — proyecto-clawd', icon: '#3b7be8', dark: true, body:
         `<div class="code"><div class="side"><div>📁 clawd-pet</div><div>&nbsp;&nbsp;main.js</div><div>&nbsp;&nbsp;fullscreen.js</div><div>&nbsp;&nbsp;📁 renderer</div><div>&nbsp;&nbsp;&nbsp;&nbsp;costumes.js</div><div class="on">&nbsp;&nbsp;&nbsp;&nbsp;pet.js</div><div>&nbsp;&nbsp;&nbsp;&nbsp;sfx.js</div><div>&nbsp;&nbsp;&nbsp;&nbsp;style.css</div></div>
          <div class="gutter">${Array.from({ length: lines }, (_, i) => 466 + i).join('<br>')}</div><div class="src">${code}</div></div>` });
-    document.getElementById('arrow').innerHTML = arrow(1420, 880, 1590, 950, 70);
+    document.getElementById('arrow').innerHTML = arrow(1290, 905, 1470, 965, 70);
     document.getElementById('tag').innerHTML = creditTag();
     document.getElementById('chrome').innerHTML = desktopChrome({ time: '10:24', date: '25/10/2026', openApps: [0, 1] });
   </script>

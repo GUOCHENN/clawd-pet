@@ -69,7 +69,7 @@
   .search { width: 210px; height: 30px; border-radius: 15px; background: rgba(255,255,255,.14); }
   .clock { margin-left: auto; font-family: 'Silkscreen', monospace; color: #fff; font-size: 20px; text-align: right; line-height: 1.05; }
   .clock small { display: block; font-size: 13px; opacity: .75; }
-  .hero-clawd { position: absolute; right: 128px; bottom: 112px; width: 262px; transform: rotate(-4deg); }
+  .hero-clawd { position: absolute; right: 134px; bottom: 112px; }
   .air-shadow { position: absolute; right: 160px; bottom: 58px; width: 210px; height: 22px; border-radius: 50%; background: rgba(31, 34, 64, 0.22); }
   .speed { position: absolute; height: 7px; border-radius: 4px; background: rgba(255,255,255,.85); }
   .cursor { position: absolute; right: 66px; bottom: 150px; transform: rotate(-14deg); }
@@ -109,8 +109,8 @@
   .film::before { top: 11px; } .film::after { bottom: 11px; }
   .frame { flex: 1; background: var(--paper); border-radius: 10px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 10px 6px 12px; overflow: hidden; }
   .frame .time { position: absolute; top: 9px; left: 10px; font-family: 'Silkscreen'; font-size: 17px; background: var(--ink); color: var(--paper); padding: 3px 7px 2px; border-radius: 4px; }
-  .frame .art { flex: 1; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding-top: 30px; }
-  .frame .art img { max-width: 92%; max-height: 132px; object-fit: contain; }
+  .frame .art { flex: 1; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding-top: 34px; }
+  .frame .art img { max-width: 94%; max-height: 152px; object-fit: contain; }
   .frame b { font-family: 'Fredoka'; font-weight: 700; font-size: 27px; margin-top: 8px; }
   .frame.night { background: #2E3263; } .frame.night b { color: #fff; } .frame.night .time { background: var(--sun); color: var(--ink); }
   .moon { position: absolute; right: 12px; top: 10px; width: 26px; height: 26px; border-radius: 50%; box-shadow: -7px 3px 0 0 #FFE7A3; }
@@ -118,7 +118,7 @@
   /* ---------- how to play ---------- */
   .tips { left: 64px; right: 64px; top: 1566px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .tip { display: flex; align-items: center; gap: 16px; background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 10px 18px; box-shadow: 5px 5px 0 var(--ink); }
-  .tip img { width: 86px; height: 70px; object-fit: contain; flex: none; }
+  .tip img { width: 100px; height: 84px; object-fit: contain; object-position: center bottom; flex: none; }
   .tip h3 { font-family: 'Fredoka'; font-weight: 700; font-size: 29px; line-height: 1; margin-bottom: 4px; }
   .tip p { font-size: 20px; font-weight: 700; color: var(--ink2); line-height: 1.2; }
   .tip:nth-child(1) { background: #FFE9DF; } .tip:nth-child(2) { background: #E3F1FB; } .tip:nth-child(3) { background: #EEE8FD; } .tip:nth-child(4) { background: #E4F5EC; }
@@ -151,7 +151,7 @@
       <div class="bubble">¡Ay! ¡No me pinches!</div>
       <div class="air-shadow"></div>
       <div class="speed" style="left:350px;top:250px;width:70px"></div><div class="speed" style="left:318px;top:282px;width:100px"></div><div class="speed" style="left:360px;top:314px;width:60px"></div>
-      <img class="hero-clawd px" src="sprites/hitair.png" alt="">
+      <img class="hero-clawd px" data-art="7" src="sprites/hitair.png" alt="">
       <div class="pok">¡POK!</div>
       <div class="cursor" id="cursor"></div>
       <div class="taskbar">
@@ -166,19 +166,19 @@
 
   <div class="abs sec-title" style="top:1160px">UN DÍA CON CLAWD</div>
   <div class="abs film">
-    <div class="frame"><span class="time">08:00</span><div class="art"><img class="px" src="sprites/typing.png"></div><b>Programa</b></div>
-    <div class="frame"><span class="time">12:00</span><div class="art"><img class="px" src="sprites/chef.png"></div><b>Cocina</b></div>
-    <div class="frame"><span class="time">16:00</span><div class="art"><img class="px" src="sprites/skate.png"></div><b>Patina</b></div>
-    <div class="frame"><span class="time">19:00</span><div class="art"><img class="px" src="sprites/gym.png"></div><b>Entrena</b></div>
-    <div class="frame night"><span class="time">23:00</span><span class="moon"></span><div class="art"><img class="px" src="sprites/sleepz.png"></div><b>A dormir</b></div>
+    <div class="frame"><span class="time">08:00</span><div class="art"><img class="px" data-group="film" src="sprites/typing.png"></div><b>Programa</b></div>
+    <div class="frame"><span class="time">12:00</span><div class="art"><img class="px" data-group="film" src="sprites/chef.png"></div><b>Cocina</b></div>
+    <div class="frame"><span class="time">16:00</span><div class="art"><img class="px" data-group="film" src="sprites/skate.png"></div><b>Patina</b></div>
+    <div class="frame"><span class="time">19:00</span><div class="art"><img class="px" data-group="film" src="sprites/gym.png"></div><b>Entrena</b></div>
+    <div class="frame night"><span class="time">23:00</span><span class="moon"></span><div class="art"><img class="px" data-group="film" src="sprites/sleepz.png"></div><b>A dormir</b></div>
   </div>
 
   <div class="abs sec-title" style="top:1512px">CÓMO JUGAR CON ÉL</div>
   <div class="abs tips">
-    <div class="tip"><img class="px" src="sprites/faint.png"><div><h3>Pínchalo</h3><p>Sale volando y ve estrellitas.</p></div></div>
-    <div class="tip"><img class="px" src="sprites/run.png"><div><h3>Te sigue</h3><p>Corre detrás de tu ratón.</p></div></div>
-    <div class="tip"><img class="px" src="sprites/wizard.png"><div><h3>Se disfraza</h3><p>11 trajes que se pone solo.</p></div></div>
-    <div class="tip"><img class="px" src="sprites/cool.png"><div><h3>Discreto</h3><p>Si juegas, se esconde.</p></div></div>
+    <div class="tip"><img class="px" data-group="tips" src="sprites/faint.png"><div><h3>Pínchalo</h3><p>Sale volando y ve estrellitas.</p></div></div>
+    <div class="tip"><img class="px" data-group="tips" src="sprites/run.png"><div><h3>Te sigue</h3><p>Corre detrás de tu ratón.</p></div></div>
+    <div class="tip"><img class="px" data-group="tips" src="sprites/music.png"><div><h3>Se disfraza</h3><p>11 trajes que se pone solo.</p></div></div>
+    <div class="tip"><img class="px" data-group="tips" src="sprites/cool.png"><div><h3>Discreto</h3><p>Si juegas, se esconde.</p></div></div>
   </div>
 
   <div class="abs credits" id="credits"></div>

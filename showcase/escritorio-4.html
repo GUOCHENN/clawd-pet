@@ -20,7 +20,7 @@
   <div class="wall"></div><div id="stars"></div><div class="moon"></div>
   <div id="icons"></div>
   <div id="wins"></div>
-  <img class="pet px" src="sprites/sleepz.png" style="right:125px;width:196px">
+  <img class="pet px" data-art="5" src="sprites/sleepz.png" style="right:125px">
   <div class="note" style="right:420px;bottom:200px;font-size:66px;text-align:right">A medianoche… se queda dormido<small>¡buenas noches, Clawd!</small></div>
   <div id="arrow"></div>
   <div id="tag"></div>
@@ -42,6 +42,10 @@
         <div class="meta"><b>Canción de cuna (8-bit)</b><span>Reproduciendo · Clawd Music</span>
           <div class="prog"><i></i></div><div class="ctrls"><span>⏮</span><span>⏸</span><span>⏭</span><span style="margin-left:auto;font-size:16px">2:41 / 4:10</span></div></div></div>` });
     document.getElementById('arrow').innerHTML = arrow(1460, 900, 1600, 960, 60);
+    // more pixel Zs drifting up from the sleeping sprite
+    const Z = ['OOOOO', '...O.', '..O..', '.O...', 'OOOOO'];
+    document.body.insertAdjacentHTML('beforeend', [[1800, 812, 6, 0.85], [1846, 738, 8, 0.6]].map(([x, y, c, o]) =>
+      `<div style="position:absolute;left:${x}px;top:${y}px;opacity:${o}">${pixelSVG(Z, c)}</div>`).join(''));
     document.getElementById('tag').innerHTML = creditTag();
     document.getElementById('chrome').innerHTML = desktopChrome({ time: '23:47', date: '25/10/2026', dark: true, openApps: [4] });
   </script>

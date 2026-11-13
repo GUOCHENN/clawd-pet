@@ -513,10 +513,12 @@ const costumeActions = {
       const r = svgs.walk.rig;
       const c = r.costume;
       const pivot = at(27.5, 8); // where the right hand grips the handle
+      // fix the pivot now, while the hammer is untransformed (setting it mid-drop shifts it)
+      gsap.set(c.hammer, { svgOrigin: pivot, rotation: 0 });
       const tl = gsap.timeline();
       popOn(tl, c.hardhat);
       wear(tl, c.hammer, 0.15);
-      tl.set(c.hammer, { svgOrigin: pivot, rotation: 0 }, 0.15)
+      tl
         .fromTo(c.hammer, { y: -60 }, { y: 0, duration: 0.25, ease: 'bounce.out' }, 0.15);
       for (let i = 0; i < 4; i++) {
         const t = 0.6 + i * 0.85;
@@ -617,12 +619,13 @@ const costumeActions = {
     run() {
       const r = svgs.walk.rig;
       const c = r.costume;
+      // fix the pivot while the wand is untransformed (the scale-0 fromTo below renders at once)
+      gsap.set(c.wand, { svgOrigin: at(27, 11), rotation: 0, scale: 1, y: 0 });
       const tl = gsap.timeline();
       popOn(tl, c.wizHat);
       wear(tl, c.wand, 0.2);
       swapEyes(tl, r, c.happyEyes, 0.2);
-      tl.set(c.wand, { svgOrigin: at(27, 11) }, 0)
-        .fromTo(c.wand, { scale: 0 }, { scale: 1, duration: 0.25, ease: 'steps(3)' }, 0.2);
+      tl.fromTo(c.wand, { scale: 0 }, { scale: 1, duration: 0.25, ease: 'steps(3)' }, 0.2);
       for (let i = 0; i < 3; i++) {
         const t = 0.6 + i * 0.85;
         tl.to([c.wand, r.hands[1]], { y: -16, duration: 0.15 }, t)
