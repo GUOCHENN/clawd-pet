@@ -2,7 +2,13 @@
 // Clawd desktop pet. Each animation is one of the raw SVGs in assets/raw, stacked in #pet;
 // an action shows its SVG, plays a finite GSAP timeline, and the pet falls back to idle.
 
-const SCALE = 1.25; // SVG units -> screen px
+// One art pixel (a third of a big Clawd pixel, 10.625 / 3 SVG units) is PIXEL screen px.
+const PIXEL = 4;
+const SCALE = PIXEL / (10.625 / 3); // SVG units -> screen px
+
+// Window moves are queued and applied by the pixel renderer on its beat, in whole pixels.
+const winPos = { pending: null };
+const queuePos = (x, y) => { winPos.pending = [x, y]; };
 
 const SVG_FILES = {
   walk: 'walk',     // rest pose rig, used by idle / look / walk / jump / sleep (tweened)
@@ -46,7 +52,17 @@ function mount(key, markup) {
   const [, , w, h] = svg.getAttribute('viewBox').split(/\s+/).map(Number);
   svg.setAttribute('width', w * SCALE);
   svg.setAttribute('height', h * SCALE);
-  svg.style.left = `${(-w * SCALE) / 2}px`;
+  // Place the drawing so its pixel grid lines up with the screen's art-pixel grid. The walk rig's
+  // grid starts at x = -10.25 (the left arm of the official 12x8 sprite); the others at 0.
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const gx = key === 'walk' ? -10.25 * SCALE : 0;
+  const x0 = Math.round((W / 2 - (w * SCALE) / 2 + gx) / PIXEL) * PIXEL - gx;
+  const y0 = Math.round((H - 4 - h * SCALE) / PIXEL) * PIXEL;
+  svg.dataset.x0 = x0;
+  svg.dataset.y0 = y0;
+  svg.style.left = `${x0 - W / 2}px`;
+  svg.style.bottom = `${H - 4 - (y0 + h * SCALE)}px`;
   svg.dataset.key = key;
   svgs[key] = svg;
   return svg;
@@ -71,6 +87,7 @@ function pixelGroup(parent, cells, size, fill) {
 }
 
 const X_CELLS = [[0, 0], [6, 0], [3, 3], [0, 6], [6, 6]];
+const Z_CELLS = [[0, 0], [1, 0], [2, 0], [2, 1], [1, 2], [0, 3], [0, 4], [1, 4], [2, 4]];
 const STAR_CELLS = [[2, 0], [0, 2], [2, 2], [4, 2], [2, 4]];
 const shift = (cells, dx, dy) => cells.map(([x, y]) => [x + dx, y + dy]);
 
@@ -79,25 +96,19 @@ function buildRigs() {
   const body = q(W, 'body');
   W.rig = {
     // > < squeezed eyes, X X dizzy eyes, and two orbiting stars
-    squint: pixelGroup(body, [[22, 9], [25, 12], [28, 15], [25, 18], [22, 21], [82, 9], [79, 12], [76, 15], [79, 18], [82, 21]], 3, 'black'),
-    dizzyEyes: pixelGroup(body, [...shift(X_CELLS, 22, 12), ...shift(X_CELLS, 76, 12)], 3, 'black'),
-    stars: [0, 1].map(() => pixelGroup(q(W, 'Group 2'), STAR_CELLS, 2, '#F2C94C')),
+    squint: pixelSprite(body, { mx: 3, my: 2, rows: [
+      'K..............K', '.K............K.', '..K..........K..', '.K............K.', 'K..............K'].map((r) => r.slice(0, 3) + '.'.repeat(12) + r.slice(-3)) }),
+    dizzyEyes: pixelSprite(body, { mx: 3, my: 3, rows: ['K.K............K.K', '.K..............K.', 'K.K............K.K'] }),
+    closedEyes: pixelSprite(body, { mx: 3, my: 4, rows: ['KKK............KKK'] }),
+    stars: [0, 1].map(() => pixelGroup(q(W, 'Group 2'), STAR_CELLS.map(([x, y]) => [x * M / 2, y * M / 2]), M, '#F2C94C')),
     group: q(W, 'Group 2'),
     body: q(W, 'body'),
     eyes: q(W, 'body').querySelector('g'),
     eyeRects: [...q(W, 'body').querySelector('g').querySelectorAll('rect')],
     legs: [...W.querySelectorAll('[id^="leg"]')], // markup order: leg4, leg3, leg2, leg1
     hands: [q(W, 'left-hand'), q(W, 'right-hand')],
-    zs: [0, 1, 2].map(() => {
-      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      t.setAttribute('class', 'zzz');
-      t.setAttribute('x', 92);
-      t.setAttribute('y', 8);
-      t.setAttribute('opacity', 0);
-      t.textContent = 'z';
-      W.appendChild(t);
-      return t;
-    }),
+    // pixel "z"s for sleeping
+    zs: [0, 1, 2].map(() => pixelGroup(W, Z_CELLS.map(([x, y]) => [92 + x * M, -6 + y * M]), M, '#DD775B')),
   };
 
   // Legs are full width and reach far up behind the body (top at y 30), and the whole leg
@@ -114,6 +125,7 @@ function buildRigs() {
   half.setAttribute('width', 700);
   half.setAttribute('height', 400);
   below.appendChild(half);
+  W.rig.legClip = half;
   W.querySelector('defs').appendChild(below);
   const legLayer = W.rig.legs[0].parentNode; // the ground-clip group holding the legs
   const wrap = document.createElementNS(NS, 'g');
@@ -175,7 +187,7 @@ function resetWalkRig() {
   gsap.killTweensOf([r.group, r.body, r.eyes, ...r.eyeRects, ...r.legs, ...r.hands, ...r.zs, ...r.stars]);
   gsap.set([r.group, r.body, r.eyes, ...r.eyeRects, ...r.legs, ...r.hands], { clearProps: 'all' });
   gsap.set([...r.zs, ...r.stars], { clearProps: 'all' });
-  [...r.zs, ...r.stars, r.squint, r.dizzyEyes].forEach(el => el.setAttribute('opacity', 0));
+  [...r.zs, ...r.stars, r.squint, r.dizzyEyes, r.closedEyes].forEach(el => el.setAttribute('opacity', 0));
   if (r.costumeParts) {
     gsap.killTweensOf(r.costumeParts);
     gsap.set(r.costumeParts, { clearProps: 'all' });
@@ -189,10 +201,15 @@ function startIdle() {
   stopIdle();
   show('walk');
   const r = svgs.walk.rig;
-  state.idle.push(gsap.to(r.body, { y: 1.5, duration: 1.1, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
+  state.idle.push(gsap.to(r.body, { y: M, duration: 0.9, ease: 'steps(1)', yoyo: true, repeat: -1, repeatDelay: 0.3 }));
   const blink = () => {
-    gsap.to(r.eyes, { scaleY: 0.1, transformOrigin: '50% 50%', duration: 0.06, yoyo: true, repeat: Math.random() < 0.25 ? 3 : 1 });
-    state.idle.push(gsap.delayedCall(rand(2, 5), blink));
+    const twice = Math.random() < 0.25;
+    const blinkTl = gsap.timeline();
+    [0, 0.3].slice(0, twice ? 2 : 1).forEach((t) => {
+      blinkTl.set(r.eyes, { opacity: 0 }, t).set(r.closedEyes, { attr: { opacity: 1 } }, t)
+        .set(r.eyes, { opacity: 1 }, t + 0.15).set(r.closedEyes, { attr: { opacity: 0 } }, t + 0.15);
+    });
+    state.idle.push(blinkTl, gsap.delayedCall(rand(2, 5), blink));
   };
   const glance = () => {
     gsap.to(r.eyes, { x: [-2, 0, 2][Math.floor(Math.random() * 3)], duration: 0.15, ease: 'power2.out' });
@@ -219,7 +236,7 @@ async function windowBounds() {
 function moveWindow(tl, b, targetX, duration, ease, at) {
   if (!b) return;
   const proxy = { x: b.x };
-  tl.to(proxy, { x: targetX, duration, ease, onUpdate: () => window.pet.setPos(proxy.x, b.y) }, at);
+  tl.to(proxy, { x: targetX, duration, ease, onUpdate: () => queuePos(proxy.x, b.y) }, at);
 }
 
 function clampX(b, x) {
@@ -345,7 +362,7 @@ const actions = {
         .to(r.legs, { scaleY: 1, y: 4, duration: 0.15 }, 'jump') // dangle a little; never switch origin
         .to(r.group, { y: -95, duration: 0.45, ease: 'sine.out' }, 'jump')
         .to(r.body, { y: 0, scaleX: 1, scaleY: 1, duration: 0.2 }, 'jump+=0.12')
-        .to(r.group, { rotation: 360 * dir, svgOrigin: '53 45', duration: 0.55, ease: 'power1.inOut' }, 'jump+=0.12') // whole-body flip, legs included
+        .to(r.group, { rotation: 360 * dir, svgOrigin: '53 45', duration: 0.55, ease: 'steps(4)' }, 'jump+=0.12') // whole-body flip in quarter turns
         .to(r.group, { y: 0, duration: 0.24, ease: 'power3.in' }, 'jump+=0.66')
         .to(r.legs, { y: 0, duration: 0.2 }, 'jump+=0.66')
         .set(r.group, { rotation: 0 }, 'jump+=0.9')
@@ -528,7 +545,8 @@ const actions = {
     run() {
       const r = svgs.walk.rig;
       const tl = gsap.timeline();
-      tl.to(r.eyes, { scaleY: 0.15, y: 3, transformOrigin: '50% 100%', duration: 0.5, ease: 'power1.in' })
+      tl.set(r.eyes, { opacity: 0 }, 0.3).set(r.closedEyes, { attr: { opacity: 1 } }, 0.3)
+        .to(r.eyes, { duration: 0.5 }, 0)
         .to(r.body, { y: 3, duration: 0.6, ease: 'sine.inOut' }, '<')
         .to(r.hands, { y: 3, duration: 0.6, ease: 'sine.inOut' }, '<')
         .addLabel('zz')
@@ -542,7 +560,7 @@ const actions = {
           ease: 'none', repeat: 5, repeatDelay: 0.6,
         }, `zz+=${i * 0.8}`);
       });
-      tl.to(r.eyes, { scaleY: 1, y: 0, duration: 0.15 }, 'zz+=11.5')
+      tl.set(r.closedEyes, { attr: { opacity: 0 } }, 'zz+=11.5').set(r.eyes, { opacity: 1 }, 'zz+=11.5')
         .to([r.body, r.hands], { y: 0, duration: 0.2, ease: 'back.out(3)' }, '<');
       return tl;
     },
@@ -671,7 +689,7 @@ async function followTick() {
     const d = Math.hypot(dx, dy);
     if (d > (follow.running ? 12 : 45)) {
       const step = Math.min(d, 300 * dt);
-      window.pet.setPos(clampX(b, b.x + (dx / d) * step), clampY(b, b.y + (dy / d) * step));
+      queuePos(clampX(b, b.x + (dx / d) * step), clampY(b, b.y + (dy / d) * step));
       startRun(dx >= 0 ? 1 : -1);
     } else if (follow.running) {
       stopRun();
@@ -798,6 +816,7 @@ document.addEventListener('contextmenu', (e) => {
   for (const [key, file] of Object.entries(SVG_FILES)) mount(key, raw[file]);
   buildRigs();
   buildCostumes();
+  pixelView.start();
   showFrame(svgs.gym.rig.frames, 0);
   showFrame(svgs.stomp.rig.frames, 0);
   showFrame(svgs.flag.rig.frames, 0);

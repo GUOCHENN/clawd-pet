@@ -20,18 +20,21 @@ No hace falta instalar nada más. El icono de Clawd en la bandeja del sistema si
 
 | | |
 |---|---|
+| **Pixel art de verdad** | Todo Clawd se dibuja en una cuadrícula de píxeles a 12 fotogramas por segundo, como en un videojuego clásico: sin bordes borrosos, inclinaciones pixel a pixel y volteretas en cuartos de vuelta. |
 | **Pínchalo** | Recibe el golpe, sale volando, se marea con estrellitas y se recupera. Cuantas más veces seguidas, más alto salta. |
 | **Arrástralo** | Lo llevas a cualquier sitio y patalea en el aire. |
 | **Te sigue** | Con «seguir al ratón» activado, corre detrás del cursor por toda la pantalla. |
 | **Discreto** | Si juegas o ves un vídeo a pantalla completa, se esconde solo y no hace ruido. |
 | **Firmes** | Opción «aguantar el golpe»: se queda quieto cuando lo pinchas. |
 | **19 acciones** | Pasear, saltar, mirar alrededor, confeti, bandera, gimnasio, dormir… |
-| **11 disfraces** | Melómano, programador, skater, detective, obrero, chef, vaquero, mago, astronauta, de fiesta y muy cool. |
+| **11 disfraces** | Melómano, programador, skater, detective, obrero, chef, vaquero, mago, astronauta, de fiesta y muy cool, con accesorios enormes: un mazo más alto que Clawd, un sombrero de vaquero más ancho que todo él… El programador saca un escritorio con monitor, se gira para teclear y luego lo recoge todo. |
 | **18 sonidos** | Todos generados con código en tiempo real: ni un solo archivo de audio. |
 
 Todo se controla con **clic derecho** sobre Clawd. (Por ahora el menú está en chino.)
 
 ## Galería
+
+*(Capturas de la versión 1.0, antes del estilo pixel art.)*
 
 | | |
 |---|---|
@@ -55,6 +58,7 @@ npm run package    # crear Clawd.exe en ../clawd-dist
 - `main.js`: ventana transparente, bandeja, menú, detección de pantalla completa (`fullscreen.js`).
 - `renderer/pet.js`: el esqueleto de Clawd, todas las acciones y la interacción.
 - `renderer/costumes.js`: los 11 disfraces.
+- `renderer/pixelate.js`: el renderizado pixel art (cuadrícula, paleta, 12 fps).
 - `renderer/sfx.js`: los sonidos (Web Audio).
 - `showcase/`: el código de los carteles y capturas de esta página.
 
